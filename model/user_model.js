@@ -5,7 +5,7 @@ const uuid = require('uuid')
 
 const userSchema = new mongoose.Schema({
     id: { type: String, unique: true },
-    name: { type: String, default: '' },
+    name: { type: String, default: ""},
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     phoneNumber: { type: String, default: "" },
