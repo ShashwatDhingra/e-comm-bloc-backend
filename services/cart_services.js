@@ -59,7 +59,7 @@ const cartService = {
             return {
                 status: true,
                 statusCode: 200,
-                data: updateCart,
+                data: updateCart.products,
                 message: "Product deleted from cart.",
                 error: null
             }
