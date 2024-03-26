@@ -54,7 +54,7 @@ const cartService = {
                 error: null
             }
         } catch (e) {
-            utils.getErrorResponse(e, 500);
+            return utils.getErrorResponse(e, 500);
         }
     },
 
@@ -62,7 +62,7 @@ const cartService = {
         try {
             const foundCart = await cartModel.find({
                 user: userId
-            });
+            }).populate("products.product");
 
             if (!foundCart) {
                 return {
