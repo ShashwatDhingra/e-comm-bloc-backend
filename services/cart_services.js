@@ -4,7 +4,7 @@ const utils = require('../utils/utils');
 const cartService = {
     addToCart: async function (product, user, quantity) {
         try {
-            const foundCart = await cartModel.findOne({ user: user });
+            let foundCart = await cartModel.findOne({ user: user }).populate("products.product");
 
             if (!foundCart) {
                 const newCart = new cartModel({ user: user });
@@ -16,22 +16,30 @@ const cartService = {
                 return {
                     status: true,
                     statusCode: 200,
+                    data: newCart.products,
                     message: 'Products added to cart',
                     error: null
                 };
             }
 
-            // If cart is already exists.
-
+            // Delete item if already exists
             await cartModel.findOneAndUpdate(
+                {user: user, "products.product": product},
+                {$pull: {products: {"product": product}}}
+            )
+
+            // If cart is already exists.
+            foundCart = await cartModel.findOneAndUpdate(
                 { user: user },
-                { $push: { products: { product: product, quantity: quantity } } }
-            );
+                { $push: { products: { product: product, quantity: quantity } } },
+                {new: true}
+            ).populate("products.product");
 
             return {
                 status: true,
                 statusCode: 200,
-                message: 'Updated Cart',
+                data: foundCart.products,
+                message: 'Added to Cart',
                 error: null
             };
 
@@ -42,14 +50,16 @@ const cartService = {
 
     removeFromCart: async function (product, user) {
         try {
-            await cartModel.findOneAndUpdate(
+            const updateCart = await cartModel.findOneAndUpdate(
                 { user: user },
-                { $pull: { products: { product: product } } }
-            );
+                { $pull: { products: { product: product } } },
+                {new: true}
+            ).populate("products.product");
 
             return {
                 status: true,
                 statusCode: 200,
+                data: updateCart,
                 message: "Product deleted from cart.",
                 error: null
             }
@@ -60,7 +70,7 @@ const cartService = {
 
     getCartForUser: async function (userId) {
         try {
-            const foundCart = await cartModel.find({
+            const foundCart = await cartModel.findOne({
                 user: userId
             }).populate("products.product");
 
@@ -76,7 +86,7 @@ const cartService = {
             return {
                 status: true,
                 statusCode: 200,
-                data: foundCart,
+                data: foundCart.products,
                 message: "Successfully fetched and returned the cart",
                 error: null
             }
