@@ -18,7 +18,7 @@ const UserServices = {
 
       await user.save();
 
-      return { status: true,  statusCode: 200, data: user, message: 'User Created Successfully', error: null}
+      return { status: true, statusCode: 200, data: user, message: 'User Created Successfully', error: null }
 
     } catch (e) {
       console.log(e);
@@ -58,7 +58,35 @@ const UserServices = {
         message: e.message
       }, 500);
     }
-  }
+  },
+
+  updateDetail: async function (userId, updateData) {
+    try {
+      const updatedUser = await userModel.findOneAndUpdate(
+        { _id: userId },
+        updateData,
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return utils.getErrorResponse({
+          message: "User not found!"
+        }, 404);
+      }
+
+      return {
+        status: true,
+        statusCode: 200,
+        data: updatedUser,
+        message: "Successfully updated the user",
+        error: null
+      }
+    } catch (e) {
+      return utils.getErrorResponse({
+        e
+      }, 500);
+    }
+  },
 }
 
 module.exports = UserServices;

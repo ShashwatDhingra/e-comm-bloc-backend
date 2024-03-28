@@ -36,16 +36,27 @@ const userController = {
                 res.status(400).json(utils.getErrorResponse({ message: 'Please fill password field' }));
                 return;
             }
-            console.log('here')
 
             const result = await userServices.signIn(email, password);
-
-            console.log(result)
 
             res.status(result.statusCode).json(result);
 
         } catch (e) {
             console.log(e.message);
+        }
+    },
+
+    updateDetail: async function (req, res) {
+        try {
+            const userId = req.params.id;
+            const updateData = req.body;
+
+            const result = await userServices.updateDetail(userId, updateData);
+
+            res.status(result.statusCode).json(result);
+
+        } catch (e) {
+
         }
     }
 
