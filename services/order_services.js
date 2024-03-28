@@ -25,8 +25,8 @@ const orderService = {
     fetchOrdersForUser: async function (userId) {
         try {
             const order = await orderModel.find({
-                "user.id": userId
-            })
+                    "user._id": userId
+                })
 
             if (!order) {
                 return {
@@ -56,7 +56,7 @@ const orderService = {
                 { new: true }
             )
 
-            if(!order){
+            if (!order) {
                 return {
                     status: true,
                     statusCode: 404,
