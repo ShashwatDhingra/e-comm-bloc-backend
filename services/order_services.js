@@ -14,6 +14,7 @@ const orderService = {
             return {
                 status: true,
                 statusCode: 200,
+                data: newOrder,
                 message: "Order Created",
                 error: null
             };
