@@ -1,4 +1,6 @@
 const orderModel = require('../model/order_model');
+const cartModel = require('../model/cart_model');
+const mongoose = require('mongoose');
 const utils = require('../utils/utils');
 
 const orderService = {
@@ -10,6 +12,11 @@ const orderService = {
             });
 
             await newOrder.save();
+
+            await cartModel.findOneAndUpdate(
+                {user: user._id},
+                {products: []}
+            );
 
             return {
                 status: true,
@@ -26,8 +33,8 @@ const orderService = {
     fetchOrdersForUser: async function (userId) {
         try {
             const order = await orderModel.find({
-                    "user._id": userId
-                })
+                "user._id": userId
+            })
 
             if (!order) {
                 return {
