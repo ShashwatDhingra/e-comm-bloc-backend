@@ -34,7 +34,7 @@ const orderService = {
         try {
             const order = await orderModel.find({
                 "user._id": userId
-            })
+            }).sort({createdOn : -1});
 
             if (!order) {
                 return {
