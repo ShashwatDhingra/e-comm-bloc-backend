@@ -11,12 +11,8 @@ const orderService = {
             // Create Order in RazorPay
             const razorPayOrder = await razorpay.orders.create({
                 "amount": totalAmount * 100,
-                "currency": "INR",
-                "notes": {
-                    "userId": user
-                }
+                "currency": "INR"
             });
-            
 
             const newOrder = new orderModel({
                 user,
