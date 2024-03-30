@@ -4,11 +4,12 @@ const mongoose = require('mongoose');
 const utils = require('../utils/utils');
 
 const orderService = {
-    createOrder: async function (user, products) {
+    createOrder: async function (user, products, status) {
         try {
             const newOrder = new orderModel({
                 user,
-                products
+                products,
+                status
             });
 
             await newOrder.save();
