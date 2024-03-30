@@ -12,6 +12,8 @@ const orderSchema = new mongoose.Schema({
         type: [orderItemSchema], default: []
     },
     status: {type: String, default: "ORDER-PLACED"},
+    totalAmount: {type: Number, required: true},
+    razorPayOrderId: {type: String},
     updatedOn: { type: Date },
     createdOn: { type: Date }
 

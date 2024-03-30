@@ -1,15 +1,29 @@
 const orderModel = require('../model/order_model');
 const cartModel = require('../model/cart_model');
+const razorpay = require('../utils/razorpay');
 const mongoose = require('mongoose');
 const utils = require('../utils/utils');
 
 const orderService = {
-    createOrder: async function (user, products, status) {
+    createOrder: async function (user, products, status, totalAmount) {
         try {
+
+            // Create Order in RazorPay
+            const razorPayOrder = await razorpay.orders.create({
+                "amount": totalAmount * 100,
+                "currency": "INR",
+                "notes": {
+                    "userId": user
+                }
+            });
+            
+
             const newOrder = new orderModel({
                 user,
                 products,
-                status
+                status,
+                totalAmount,
+                razorPayOrderId: razorPayOrder.id
             });
 
             await newOrder.save();

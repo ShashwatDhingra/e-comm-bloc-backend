@@ -3,9 +3,9 @@ const orderService = require('../services/order_services')
 const orderController = {
     createOrder: async function(req, res){
 
-            const {user, products, status} = req.body;
+            const {user, products, status, totalAmount} = req.body;
 
-            const result = await orderService.createOrder(user, products, status);
+            const result = await orderService.createOrder(user, products, status, totalAmount);
 
             res.status(result.statusCode).json(result);
     },
